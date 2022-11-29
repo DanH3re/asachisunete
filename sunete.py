@@ -34,6 +34,7 @@ playlist = [
 "008.mp3"]
 
 playListTime = 1140
+sunetulPlaylist = 6
 random.shuffle(playlist)
 
 # Intializarea mixer
@@ -77,7 +78,7 @@ def playList(sec:int):
 for i in orar:
     sleepTime = calculateTime(i)
     if sleepTime != False:
-        if i == orar[2]:
+        if i == orar[sunetulPlaylist]:
             time.sleep(sleepTime)
             sunet(10)
             playList(playListTime)
