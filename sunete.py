@@ -1,15 +1,26 @@
 # Import
 import datetime
 import time
-import csv
 from pygame import mixer
+import random
 
-# Variables
+# Variabile
 orar = [
-"19:30:00",
-"19:39:00", 
-"19:39:20",
-"19:40:00"
+"8:00:00",
+"8:45:00",
+"9:00:00",
+"9:45:00",
+"9:55:00",
+"10:40:00",
+"11:00:00",
+"11:45:00",
+"11:55:00",
+"12:40:00",
+"12:50:00",
+"13:35:00",
+"13:00:00",
+"13:45:00",
+"14:30:00"
 ]
 
 playlist = [
@@ -21,21 +32,21 @@ playlist = [
 "006.mp3",
 "007.mp3",
 "008.mp3"]
-playListTime = 1140
 
-# Mixer Init
+playListTime = 1140
+random.shuffle(playlist)
+
+# Intializarea mixer
 mixer.init()
 
-# Functions
+# Functii
 def calculateTime(i:str):
     currentime = datetime.datetime.now()
     times = currentime.strftime('%H:%M:%S')
     times = times.split(":")
     i = i.split(":")
     x = int(times[0])*3600+int(times[1])*60+int(times[2])*1 
-    print(x)
     y = int(i[0])*3600+int(i[1])*60+int(i[2])*1 
-    print(y)
     if(x < y):
         return y-x
     else:
@@ -62,7 +73,7 @@ def playList(sec:int):
     time.sleep(sec)
     mixer.music.stop()
 
-# Loop
+# For loop
 for i in orar:
     sleepTime = calculateTime(i)
     if sleepTime != False:
