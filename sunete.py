@@ -32,8 +32,10 @@ def calculateTime(i:str):
     times = currentime.strftime('%H:%M:%S')
     times = times.split(":")
     i = i.split(":")
-    x = int(times[0])*360 + int(times[1])*60 + int(times[2])*1 
-    y = int(i[0])*360 + int(i[1])*60 + int(i[2])*1 
+    x = int(times[0])*3600+int(times[1])*60+int(times[2])*1 
+    print(x)
+    y = int(i[0])*3600+int(i[1])*60+int(i[2])*1 
+    print(y)
     if(x < y):
         return y-x
     else:
@@ -67,7 +69,7 @@ for i in orar:
         if i == orar[2]:
             time.sleep(sleepTime)
             sunet(10)
-            playList(playListTime)
+            playList(20)
         else:
             time.sleep(sleepTime)
             sunet(10)
