@@ -67,7 +67,7 @@ for i in orar:
         if i == orar[2]:
             time.sleep(sleepTime)
             sunet(10)
-            playList(20)
+            playList(playListTime)
         else:
             time.sleep(sleepTime)
             sunet(10)
