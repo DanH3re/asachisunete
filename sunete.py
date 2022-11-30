@@ -4,6 +4,8 @@ import time
 from pygame import mixer
 import random
 from mutagen.mp3 import MP3
+from os import listdir
+from os.path import isfile, join
 
 
 # Variabile
@@ -13,7 +15,7 @@ orar = [
 "9:00:00",
 "9:45:00",
 "9:55:00",
-"23:39:00",
+"10:40:00",
 "11:00:00",
 "11:45:00",
 "11:55:00",
@@ -25,18 +27,13 @@ orar = [
 "14:30:00"
 ]
 
-playlist = [
-"001.mp3",
-"002.mp3", 
-"003.mp3",
-"004.mp3",
-"005.mp3",
-"006.mp3",
-"007.mp3",
-"008.mp3"]
-
+mypath = "./muzica"
+playlist = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 playListTime = 1140
 random.shuffle(playlist)
+
+imnulPath = "./sunete/imnul.mp3"
+sunetPath = "./sunete/sunet.mp3"
 
 # Intializarea mixer
 mixer.init()
@@ -58,7 +55,7 @@ def sunet(sec:int):
         currentime = datetime.datetime.now()
         times = currentime.strftime('%H:%M:%S')
         print("[" + times + "]" + "A sunat.")
-        mixer.music.load("./muzica/sunet.mp3")
+        mixer.music.load(sunetPath)
         mixer.music.play()
         time.sleep(sec)
         mixer.music.stop()
@@ -69,21 +66,24 @@ def playList(sec:int):
     times = currentime.strftime('%H:%M:%S')
     playlistLength = 0
     print("[" + times + "]" + "Playlist.")
-    mixer.music.load("./muzica/imnul.mp3")
-    audio = MP3("./muzica/imnul.mp3")
+    mixer.music.load(imnulPath)
+    audio = MP3(imnulPath)
     mixer.music.play()
     print("Cântă: Imnul")
     playlistLength = audio.info.length
-    time.sleep(int(audio.info.length))
+    time.sleep(audio.info.length)
     mixer.music.unload()
     for cantec in playlist:
+        print("Cântă: " + cantec)
         audio = MP3("./muzica/" + cantec)
-        if playlistLength + audio.info.length < sec:
-            playlistLength = playlistLength + audio.info.length
+        songLength = audio.info.length
+        if playlistLength + songLength < sec:
+            playlistLength = playlistLength + songLength
             mixer.music.load("./muzica/" + cantec)
             mixer.music.play()
             print("Cântă: " + cantec)
-            time.sleep(audio.info.length)
+            time.sleep(songLength)
+            mixer.music.stop()
             mixer.music.unload()
 
 # For loop
