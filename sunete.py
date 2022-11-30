@@ -13,7 +13,7 @@ orar = [
 "9:00:00",
 "9:45:00",
 "9:55:00",
-"10:40:00",
+"23:39:00",
 "11:00:00",
 "11:45:00",
 "11:55:00",
@@ -58,7 +58,7 @@ def sunet(sec:int):
         currentime = datetime.datetime.now()
         times = currentime.strftime('%H:%M:%S')
         print("[" + times + "]" + "A sunat.")
-        mixer.music.load("sunet.mp3")
+        mixer.music.load("./muzica/sunet.mp3")
         mixer.music.play()
         time.sleep(sec)
         mixer.music.stop()
@@ -69,17 +69,18 @@ def playList(sec:int):
     times = currentime.strftime('%H:%M:%S')
     playlistLength = 0
     print("[" + times + "]" + "Playlist.")
-    mixer.music.load("imnul.mp3")
-    audio = MP3("imul.mp3")
+    mixer.music.load("./muzica/imnul.mp3")
+    audio = MP3("./muzica/imnul.mp3")
     mixer.music.play()
     print("Cântă: Imnul")
     playlistLength = audio.info.length
     time.sleep(int(audio.info.length))
     mixer.music.unload()
     for cantec in playlist:
-        audio = MP3(cantec)
-        if playlistLength+audio.info.length < sec:
-            mixer.music.load(cantec)
+        audio = MP3("./muzica/" + cantec)
+        if playlistLength + audio.info.length < sec:
+            playlistLength = playlistLength + audio.info.length
+            mixer.music.load("./muzica/" + cantec)
             mixer.music.play()
             print("Cântă: " + cantec)
             time.sleep(audio.info.length)
@@ -91,8 +92,8 @@ for i in orar:
     if sleepTime != False:
         if i == orar[5]:
             time.sleep(sleepTime)
-            sunet(15)
-            playList(playListTime)
+            sunet(13)
+            playList(1140)
         else:
             time.sleep(sleepTime)
-            sunet(15)
+            sunet(13)
