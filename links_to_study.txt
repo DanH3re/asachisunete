@@ -1,0 +1,4 @@
+https://www.groovypost.com/howto/schedule-wake-sleep-windows-automatically/
+https://superuser.com/questions/42124/how-can-i-put-the-computer-to-sleep-from-command-prompt-run-menu
+https://www.makeuseof.com/windows-disable-modern-standby/
+https://answers.microsoft.com/en-us/windows/forum/all/pc-not-entering-sleep-using-rundll32exe/d4161b9c-534c-414e-8826-40736f96e2c8
