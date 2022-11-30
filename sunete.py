@@ -3,6 +3,8 @@ import datetime
 import time
 from pygame import mixer
 import random
+from mutagen.mp3 import MP3
+
 
 # Variabile
 orar = [
@@ -34,7 +36,6 @@ playlist = [
 "008.mp3"]
 
 playListTime = 1140
-sunetulPlaylist = 6
 random.shuffle(playlist)
 
 # Intializarea mixer
@@ -57,7 +58,7 @@ def sunet(sec:int):
         currentime = datetime.datetime.now()
         times = currentime.strftime('%H:%M:%S')
         print("[" + times + "]" + "A sunat.")
-        mixer.music.load("30sec.mp3")
+        mixer.music.load("sunet.mp3")
         mixer.music.play()
         time.sleep(sec)
         mixer.music.stop()
@@ -66,22 +67,32 @@ def sunet(sec:int):
 def playList(sec:int):
     currentime = datetime.datetime.now()
     times = currentime.strftime('%H:%M:%S')
+    playlistLength = 0
     print("[" + times + "]" + "Playlist.")
     mixer.music.load("imnul.mp3")
-    for cantec in playlist:
-        mixer.music.queue(cantec)
+    audio = MP3("imul.mp3")
     mixer.music.play()
-    time.sleep(sec)
-    mixer.music.stop()
+    print("Cântă: Imnul")
+    playlistLength = audio.info.length
+    time.sleep(int(audio.info.length))
+    mixer.music.unload()
+    for cantec in playlist:
+        audio = MP3(cantec)
+        if playlistLength+audio.info.length < sec:
+            mixer.music.load(cantec)
+            mixer.music.play()
+            print("Cântă: " + cantec)
+            time.sleep(audio.info.length)
+            mixer.music.unload()
 
 # For loop
 for i in orar:
     sleepTime = calculateTime(i)
     if sleepTime != False:
-        if i == orar[sunetulPlaylist]:
+        if i == orar[5]:
             time.sleep(sleepTime)
-            sunet(10)
+            sunet(15)
             playList(playListTime)
         else:
             time.sleep(sleepTime)
-            sunet(10)
+            sunet(15)
