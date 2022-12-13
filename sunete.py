@@ -22,23 +22,29 @@ orar = [
 "12:40:00",
 "12:50:00",
 "13:35:00",
-"13:00:00",
 "13:45:00",
 "14:30:00"
 ]
 
-mypath = "./muzica"
-playlist = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-playListTime = 1140
-random.shuffle(playlist)
+directory = "C:/Users/MECC/Desktop/Senatul Elevilor/python sunete"
+imnulPath = directory + "/sunete/imnul.mp3"
+sunetPath = directory + "/sunete/sunet-christmas.mp3"
+muzicaPath = directory + "/muzica/"
 
-imnulPath = "./sunete/imnul.mp3"
-sunetPath = "./sunete/sunet.mp3"
+playListTime = 1140
+
 
 # Intializarea mixer
-mixer.init()
+mixer.init(devicename="Наушники (Realtek(R) Audio)")
 
 # Functii
+def calculateInterval(i:str,j:str):
+    j = j.split(":")
+    i = i.split(":")
+    x = int(j[0])*3600+int(j[1])*60+int(j[2])*1 
+    y = int(i[0])*3600+int(i[1])*60+int(i[2])*1 
+    return y-x
+    
 def calculateTime(i:str):
     currentime = datetime.datetime.now()
     times = currentime.strftime('%H:%M:%S')
@@ -51,17 +57,20 @@ def calculateTime(i:str):
     else:
         return False
 
-def sunet(sec:int):
+def sunet():
         currentime = datetime.datetime.now()
         times = currentime.strftime('%H:%M:%S')
         print("[" + times + "]" + "A sunat.")
+        audio = MP3(sunetPath)
         mixer.music.load(sunetPath)
         mixer.music.play()
-        time.sleep(sec)
+        time.sleep(audio.info.length)
         mixer.music.stop()
         mixer.music.unload()
 
 def playList(sec:int):
+    playlist = [f for f in listdir(muzicaPath) if isfile(join(muzicaPath, f))]
+    random.shuffle(playlist)
     currentime = datetime.datetime.now()
     times = currentime.strftime('%H:%M:%S')
     playlistLength = 0
@@ -74,12 +83,11 @@ def playList(sec:int):
     time.sleep(audio.info.length)
     mixer.music.unload()
     for cantec in playlist:
-        print("Cântă: " + cantec)
-        audio = MP3("./muzica/" + cantec)
+        from os import listdir
         songLength = audio.info.length
         if playlistLength + songLength < sec:
             playlistLength = playlistLength + songLength
-            mixer.music.load("./muzica/" + cantec)
+            mixer.music.load(muzicaPath + cantec)
             mixer.music.play()
             print("Cântă: " + cantec)
             time.sleep(songLength)
@@ -87,13 +95,11 @@ def playList(sec:int):
             mixer.music.unload()
 
 # For loop
-for i in orar:
-    sleepTime = calculateTime(i)
+for i in range(0, len(orar)):
+    sleepTime = calculateTime(orar[i])
     if sleepTime != False:
-        if i == orar[5]:
             time.sleep(sleepTime)
-            sunet(13)
-            playList(playListTime)
-        else:
-            time.sleep(sleepTime)
-            sunet(13)
+            sunet()
+            if orar[i+1] != 14 and i % 2 != 0:
+                Ptime = calculateInterval(orar[i], orar[i+1])-60
+                playList(Ptime)
