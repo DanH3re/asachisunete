@@ -4,7 +4,6 @@ import time
 from pygame import mixer
 import random
 from mutagen.mp3 import MP3
-from os import listdir
 from os.path import isfile, join
 
 
@@ -43,7 +42,7 @@ def calculateInterval(i:str,j:str):
     i = i.split(":")
     x = int(j[0])*3600+int(j[1])*60+int(j[2])*1 
     y = int(i[0])*3600+int(i[1])*60+int(i[2])*1 
-    return y-x
+    return x-y
     
 def calculateTime(i:str):
     currentime = datetime.datetime.now()
@@ -69,19 +68,15 @@ def sunet():
         mixer.music.unload()
 
 def playList(sec:int):
+    from os import listdir
     playlist = [f for f in listdir(muzicaPath) if isfile(join(muzicaPath, f))]
     random.shuffle(playlist)
     currentime = datetime.datetime.now()
     times = currentime.strftime('%H:%M:%S')
     playlistLength = 0
     print("[" + times + "]" + "Playlist.")
-    mixer.music.load(imnulPath)
     audio = MP3(imnulPath)
-    mixer.music.play()
-    print("Cântă: Imnul")
     playlistLength = audio.info.length
-    time.sleep(audio.info.length)
-    mixer.music.unload()
     for cantec in playlist:
         from os import listdir
         songLength = audio.info.length
@@ -100,6 +95,15 @@ for i in range(0, len(orar)):
     if sleepTime != False:
             time.sleep(sleepTime)
             sunet()
-            if orar[i+1] != 14 and i % 2 != 0:
+            if i+1 > len(orar)-1 and i % 2 != 0:
                 Ptime = calculateInterval(orar[i], orar[i+1])-60
-                playList(Ptime)
+                if i != 5:
+                    playList(Ptime)
+                else:
+                    mixer.music.load(imnulPath)
+                    mixer.music.play()
+                    print("Cântă: Imnul")
+                    audio = MP3(imnulPath)
+                    time.sleep(audio.info.length)
+                    mixer.music.unload()
+                    playList(Ptime)
